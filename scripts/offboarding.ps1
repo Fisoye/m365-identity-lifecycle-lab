@@ -38,6 +38,20 @@ function Remove-CompanyUserAccess {
             Write-Warning "ℹ️ No licenses found on user"
         }
 
+        # Remove user from all groups
+
+        #$userId = $UserPrincipalName
+        $user = Get-MgUser -UserId $UserPrincipalName
+$groups = Get-MgUserMemberOfAsGroup -UserId $userId
+
+foreach ($group in $groups) {
+    Write-Host "Removing from group: $($group.DisplayName)"
+
+    Remove-MgGroupMemberByRef `
+        -GroupId $group.Id `
+        -DirectoryObjectId $userId
+}
+
        
         # Revoke Sessions
         Write-Host "➡️ Revoking active sessions..."

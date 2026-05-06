@@ -7,7 +7,7 @@ Connect-MgGraph -Scopes "User.ReadWrite.All", "Group.ReadWrite.All", "Directory.
 
 # Run offboarding
 $result = Remove-CompanyUserAccess `
-    -UserPrincipalName "john.adewale@yourtenant.onmicrosoft.com"
+    -UserPrincipalName "john.doe2@christtech.co.uk"
 
 # Output result
 $result | Format-List
