@@ -8,7 +8,7 @@ $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # Run offboarding
 $result = Remove-CompanyUserAccess `
-    -UserPrincipalName "john.doe6@christtech.co.uk"
+    -UserPrincipalName "john.doe@contoso.com"
 
 # Output result
 $result | Format-List
