@@ -2,9 +2,14 @@
 
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Group.ReadWrite.All"
 
+# Import the offboarding script
+# ✅ Correct — resolves relative to the script's own location
+$ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+. "$ScriptRoot\onboarding.ps1"
+
 New-CompanyUser `
-    -UserPrincipalName "NewUser@Domain.com" `
-    -DisplayName "John Adewale" `
+    -UserPrincipalName "john.doe6@christtech.co.uk" `
+    -DisplayName "AAJohn Adewale" `
     -MailNickname "john.adewale" `
     -Department "Finance" `
     -JobTitle "Finance Analyst" `

@@ -40,18 +40,24 @@ function Remove-CompanyUserAccess {
 
         # Remove user from all groups
 
-        #$userId = $UserPrincipalName
-        $user = Get-MgUser -UserId $UserPrincipalName
+        # Remove user from all groups
+
+$userId = $User.Id   # ✅ use Object ID (GUID), not UPN
 $groups = Get-MgUserMemberOfAsGroup -UserId $userId
 
 foreach ($group in $groups) {
     Write-Host "Removing from group: $($group.DisplayName)"
 
-    Remove-MgGroupMemberByRef `
-        -GroupId $group.Id `
-        -DirectoryObjectId $userId
+    try {
+        Remove-MgGroupMemberByRef `
+            -GroupId $group.Id `
+            -DirectoryObjectId $userId `
+            -ErrorAction Stop
+    }
+    catch {
+        Write-Warning "Failed to remove from $($group.DisplayName): $($_.Exception.Message)"
+    }
 }
-
        
         # Revoke Sessions
         Write-Host "➡️ Revoking active sessions..."
