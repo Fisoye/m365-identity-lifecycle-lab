@@ -8,9 +8,9 @@ $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$ScriptRoot\onboarding.ps1"
 
 New-CompanyUser `
-    -UserPrincipalName "john.doe6@christtech.co.uk" `
-    -DisplayName "AAJohn Adewale" `
-    -MailNickname "john.adewale" `
+    -UserPrincipalName "john.doe@christtech.co.uk" `
+    -DisplayName "John Doe" `
+    -MailNickname "john.Doe" `
     -Department "Finance" `
     -JobTitle "Finance Analyst" `
     -UsageLocation "GB" `
