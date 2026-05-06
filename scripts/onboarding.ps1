@@ -66,17 +66,40 @@ function New-CompanyUser {
             -UsageLocation $UsageLocation
 
         # Assign Groups
-        Write-Host "➡️ Assigning groups..."
-        foreach ($GroupId in $GroupIds) {
-            try {
-                New-MgGroupMember `
-                    -GroupId $GroupId `
-                    -DirectoryObjectId $User.Id
-            }
-            catch {
-                Write-Warning "Failed to add user to group $GroupId"
-            }
+       Write-Host "➡️ Assigning groups..."
+
+# Filter out null/empty/whitespace values
+$ValidGroupIds = $GroupIds | Where-Object {
+    -not [string]::IsNullOrWhiteSpace($_)
+}
+
+if (-not $ValidGroupIds -or $ValidGroupIds.Count -eq 0) {
+    Write-Warning "⚠️ No valid group IDs provided. Skipping group assignment."
+}
+else {
+    foreach ($GroupId in $ValidGroupIds) {
+
+        try {
+            # Validate group exists
+            $Group = Get-MgGroup -GroupId $GroupId -ErrorAction Stop
         }
+        catch {
+            Write-Warning "⚠️ Group not found in tenant: ${GroupId}"
+            continue
+        }
+
+        try {
+            New-MgGroupMember `
+                -GroupId $GroupId `
+                -DirectoryObjectId $User.Id
+
+            Write-Host "✔ Added user to group $($Group.DisplayName)"
+        }
+        catch {
+            Write-Warning "⚠️ Failed to add user to group $($Group.DisplayName): $_"
+        }
+    }
+}
 
         # Assign License
         Write-Host "➡️ Assigning license..."
